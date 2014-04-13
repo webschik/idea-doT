@@ -1,0 +1,57 @@
+<idea-plugin version="2" url="https://github.com/webschik/idea-doT">
+    <id>com.webschik.doT</id>
+    <name>doT</name>
+    <version>1.1</version>
+    <description><![CDATA[
+      Enter short description for your plugin here.<br>
+      <small>most HTML tags may be used</small>
+      ]]></description>
+    <category>Custom Languages</category>
+    <change-notes><![CDATA[
+      Add change notes here.<br>
+      <small>most HTML tags may be used</small>
+      ]]>
+    </change-notes>
+
+    <depends>com.intellij.modules.lang</depends>
+    <vendor url="https://github.com/webschik">webschik</vendor>
+
+    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="107.105"/>
+
+    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <application-components>
+        <!-- Add your application components here -->
+    </application-components>
+
+    <project-components>
+        <!-- Add your project components here -->
+    </project-components>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileTypeFactory implementation="com.webschik.doT.file.DotFileTypeFactory" />
+        <lang.parserDefinition language="doT" implementationClass="com.webschik.doT.parsing.DotParseDefinition" />
+        <lang.formatter language="doT" implementationClass="com.webschik.doT.format.DotFormattingModelBuilder"/>
+        <colorSettingsPage implementation="com.webschik.doT.pages.DotColorsPage"/>
+        <lang.fileViewProviderFactory language="doT" implementationClass="com.webschik.doT.file.DotFileViewProviderFactory"/>
+        <lang.commenter language="doT" implementationClass="com.webschik.doT.editor.comments.DotCommenter"/>
+        <braceMatcher filetype="doT" implementationClass="com.webschik.doT.editor.braces.DotBraceMatcher"/>
+        <lang.foldingBuilder language="doT"
+                             implementationClass="com.webschik.doT.editor.folding.DotFoldingBuilder" />
+        <typedHandler implementation="com.webschik.doT.editor.actions.DotTypedHandler"/>
+        <enterHandlerDelegate implementation="com.webschik.doT.editor.actions.DotEnterHandler"/>
+        <applicationConfigurable instance="com.webschik.doT.pages.DotConfigurationPage"/>
+        <codeFoldingOptionsProvider instance="com.webschik.doT.config.DotFoldingOptionsProvider" />
+        <lang.psiStructureViewFactory language="doT" implementationClass="com.webschik.doT.structure.DotStructureViewFactory"/>
+        <annotator language="doT" implementationClass="com.webschik.doT.inspections.DotBlockMismatchInspection"/>
+    </extensions>
+</idea-plugin>
