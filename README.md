@@ -2,6 +2,8 @@ idea-doT
 ===
 
 > IntelliJ IDEA & Webstorm plugin for doT.js template
+-
+> [View on JetBrains plugins store](http://plugins.jetbrains.com/plugin/7327?pr=webStorm)  
 
 ## Release History
 
