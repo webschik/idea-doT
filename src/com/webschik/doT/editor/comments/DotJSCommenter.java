@@ -4,7 +4,7 @@ import com.intellij.lang.Commenter;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Commenter for native Handlebars comments: <pre>{{!-- comment --}}</pre>
+ * Commenter for native comments: <pre>{{!-- comment --}}</pre>
  */
 class DotJSCommenter implements Commenter {
     @Nullable
