@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
  * on Enter.
  */
 public class DotTypedHandler extends TypedHandlerDelegate {
+    private int openedBracesCount = 0;
+
     @Override
     public Result beforeCharTyped(char c, Project project, Editor editor, PsiFile file, FileType fileType) {
         int offset = editor.getCaretModel().getOffset();
@@ -32,11 +34,13 @@ public class DotTypedHandler extends TypedHandlerDelegate {
 
         String previousChar = editor.getDocument().getText(new TextRange(offset - 1, offset));
 
-        if (file.getViewProvider() instanceof DotFileViewProvider) {
+        if (file.getViewProvider() != null) {
             PsiDocumentManager.getInstance(project).commitAllDocuments();
 
             // we suppress the built-in "}" auto-complete when we see "{{"
             if (c == '{' && previousChar.equals("{")) {
+                openedBracesCount++;
+
                 // since the "}" autocomplete is built in to IDEA, we need to hack around it a bit by
                 // intercepting it before it is inserted, doing the work of inserting for the user
                 // by inserting the '{' the user just typed...
@@ -63,10 +67,10 @@ public class DotTypedHandler extends TypedHandlerDelegate {
 
         String previousChar = editor.getDocument().getText(new TextRange(offset - 2, offset - 1));
 
-        if (file.getViewProvider() instanceof DotFileViewProvider) {
+        if (file.getViewProvider() != null) {
             // if we're looking at a close stache, we may have some business too attend to
             if (c == '}' && previousChar.equals("}")) {
-                autoInsertCloseTag(project, offset, editor, provider);
+                //autoInsertCloseTag(project, offset, editor, provider);
             }
         }
 

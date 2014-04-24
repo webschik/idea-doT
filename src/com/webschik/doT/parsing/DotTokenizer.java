@@ -45,8 +45,8 @@ public class DotTokenizer implements Tokenizer {
             next,
             prev,
             chr;
-        IElementType tokenType,
-                tt;
+
+        IElementType tokenType;
 
         if (src != null) {
             len = src.length();
@@ -69,22 +69,24 @@ public class DotTokenizer implements Tokenizer {
                         openedDataPrefixesCount--;
                     }
 
-                    chr = src.charAt(i + 1);
+                    chr = (i == len - 1) ? 0 : src.charAt(i + 1);
                     if (typesBySymbol.containsKey(chr)) {
                         tokenType = typesBySymbol.get(chr);
                         tokenEnd++;
                         i++;
 
-                        // "defines" - {{##
-                        if (chr == '#' && src.charAt(i + 1) == chr) {
-                            tokenType = DotTokenTypes.OPEN_DEFINE;
-                            tokenEnd++;
-                            i++;
-                        } else if (src.charAt(i + 1) == '?') {
-                            tokenEnd++;
+                        if (i < len - 1) {
+                            // "defines" - {{##
+                            if (chr == '#' && src.charAt(i + 1) == chr) {
+                                tokenType = DotTokenTypes.OPEN_DEFINE;
+                                tokenEnd++;
+                                i++;
+                            } else if (src.charAt(i + 1) == '?') {
+                                tokenEnd++;
+                            }
                         }
                     }
-                } else if (current == '#' && next == '}' && (i + 1 < len - 1) && src.charAt(i + 1) == next) {
+                } else if (current == '#' && next == '}' && (i < len - 1) && src.charAt(i + 1) == next) {
                     continue;
                 } else if (current == '}' && next == current) {
                     if (openedDataPrefixesCount > 0) {
@@ -101,7 +103,7 @@ public class DotTokenizer implements Tokenizer {
                         tokenType = DotTokenTypes.CLOSE_DEFINE;
                         tokenStart--;
                     }
-                } else if (current == 'i' && next == 't' && src.charAt(i + 2) == '.') {
+                } else if (current == 'i' && next == 't' && i < len - 2 && src.charAt(i + 2) == '.') {
                     tokenType = DotTokenTypes.DATA_PREFIX;
                     tokenStart = i;
                     tokenEnd = i + 3;

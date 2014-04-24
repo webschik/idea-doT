@@ -11,6 +11,6 @@ import org.jetbrains.annotations.NotNull;
 public class DotFileViewProviderFactory implements FileViewProviderFactory {
     @Override
     public FileViewProvider createFileViewProvider(@NotNull VirtualFile virtualFile, Language language, @NotNull PsiManager psiManager, boolean physical) {
-        return new DotFileViewProvider(psiManager, virtualFile, physical);
+        return  new DotFileViewProvider(psiManager, virtualFile, physical);
     }
 }
