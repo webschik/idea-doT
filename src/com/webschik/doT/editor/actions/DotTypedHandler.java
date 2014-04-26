@@ -84,7 +84,10 @@ public class DotTypedHandler extends TypedHandlerDelegate {
      */
     private void autoInsertCloseTag(Project project, int offset, Editor editor, FileViewProvider provider) {
         String text;
-        char ch, pr, prv;
+        char ch,
+            pr,
+            prv,
+            next;
         int i, len;
 
         if (!DotConfig.isAutoGenerateCloseTagEnabled()) {
@@ -104,13 +107,13 @@ public class DotTypedHandler extends TypedHandlerDelegate {
                 ch = text.charAt(i);
                 pr = text.charAt(i - 1);
                 prv = text.charAt(i - 2);
+                next = i + 1 < len ? text.charAt(i + 1) : 0;
 
                 if (typesBySymbol.containsKey(ch)) {
                     if (
                         !nonClosesTypes.containsKey(ch) &&
                         (ch != '#' || pr != ch) &&
-                        pr == prv &&
-                        pr == openBrace
+                        (ch != '?' || next != closeBrace)
                     ) {
                         // insert the corresponding close tag
                         editor.getDocument().insertString(offset, "{{" + ch + "}}");

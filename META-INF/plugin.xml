@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="https://github.com/webschik/idea-doT">
     <id>com.webschik.doT</id>
     <name>doT</name>
-    <version>1.4</version>
+    <version>1.5</version>
     <description><![CDATA[
       Enter short description for your plugin here.<br>
       <small>most HTML tags may be used</small>
