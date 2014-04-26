@@ -23,6 +23,20 @@ enum Property {
         }
     },
 
+    VARNAME {
+        @NotNull
+        @Override
+        public String getStringName() {
+            return VNAME;
+        }
+
+        @NotNull
+        @Override
+        public String getDefault() {
+            return VNAME;
+        }
+    },
+
     FORMATTER {
         @NotNull
         @Override
@@ -67,6 +81,7 @@ enum Property {
 
     public static final String ENABLED = "enabled";
     public static final String DISABLED = "disabled";
+    private static final String VNAME = "it";
 
     /**
      * The String which will actually be persisted in a user's properties using

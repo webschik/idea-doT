@@ -26,6 +26,7 @@ public class DotTypedHandler extends TypedHandlerDelegate {
     private HashMap<Character, IElementType> typesBySymbol = DotTokenTypesBySymbol.types;
     private HashMap<Character, IElementType> nonClosesTypes = DotTokenTypesBySymbol.nonClosesTypes;
     private char openBrace = '{';
+    private char closeBrace = '}';
 
     @Override
     public Result beforeCharTyped(char c, Project project, Editor editor, PsiFile file, FileType fileType) {
@@ -34,26 +35,24 @@ public class DotTypedHandler extends TypedHandlerDelegate {
         if (offset == 0 || offset > editor.getDocument().getTextLength()) {
             return Result.CONTINUE;
         }
+        String text = editor.getDocument().getText(new TextRange(offset - 1, offset));
+        char previousChar = text.length() > 0 ? text.charAt(0) : 0;
 
-        String previousChar = editor.getDocument().getText(new TextRange(offset - 1, offset));
+        PsiDocumentManager.getInstance(project).commitAllDocuments();
 
-        if (file.getViewProvider() != null) {
-            PsiDocumentManager.getInstance(project).commitAllDocuments();
+        // we suppress the built-in "}" auto-complete when we see "{{"
+        if (c == openBrace && previousChar == c) {
+            openedBracesCount++;
 
-            // we suppress the built-in "}" auto-complete when we see "{{"
-            if (c == openBrace && previousChar.equals("{")) {
-                openedBracesCount++;
+            // since the "}" autocomplete is built in to IDEA, we need to hack around it a bit by
+            // intercepting it before it is inserted, doing the work of inserting for the user
+            // by inserting the '{' the user just typed...
+            editor.getDocument().insertString(offset, Character.toString(c));
+            // ... and position their caret after it as they'd expect...
+            editor.getCaretModel().moveToOffset(offset + 1);
 
-                // since the "}" autocomplete is built in to IDEA, we need to hack around it a bit by
-                // intercepting it before it is inserted, doing the work of inserting for the user
-                // by inserting the '{' the user just typed...
-                editor.getDocument().insertString(offset, Character.toString(c));
-                // ... and position their caret after it as they'd expect...
-                editor.getCaretModel().moveToOffset(offset + 1);
-
-                // ... then finally telling subsequent responses to this charTyped to do nothing
-                return Result.STOP;
-            }
+            // ... then finally telling subsequent responses to this charTyped to do nothing
+            return Result.STOP;
         }
 
         return Result.CONTINUE;
@@ -68,14 +67,12 @@ public class DotTypedHandler extends TypedHandlerDelegate {
             return Result.CONTINUE;
         }
 
-        String previousChar = editor.getDocument().getText(new TextRange(offset - 2, offset - 1));
+        String text = editor.getDocument().getText(new TextRange(offset - 2, offset - 1));
+        char previousChar = text.length() > 0 ? text.charAt(0) : 0;
 
-        if (file.getViewProvider() != null) {
-            // if we're looking at a close stache, we may have some business too attend to
-            if (c == '}' && previousChar.equals("}")) {
-                openedBracesCount--;
-                autoInsertCloseTag(project, offset, editor, provider);
-            }
+        if (c == closeBrace && previousChar == c) {
+            openedBracesCount--;
+            autoInsertCloseTag(project, offset, editor, provider);
         }
 
         return Result.CONTINUE;
@@ -98,29 +95,28 @@ public class DotTypedHandler extends TypedHandlerDelegate {
 
         PsiElement element = provider.findElementAt(offset - 1, DotLanguage.class);
 
-        if (element != null && element.getChildren().length > 0) {
-            PsiElement pathElem = element.getChildren()[0];
+        if (element != null) {
+            text = element.getText();
+            len = text.length();
 
-            if (pathElem != null) {
-                text = pathElem.getText();
-                len = text.length();
+            // without last "}}" and with "{{" on begin (start from index = 2)
+            for (i = offset - 3; i >= 2; i--) {
+                ch = text.charAt(i);
+                pr = text.charAt(i - 1);
+                prv = text.charAt(i - 2);
 
-                // without last "}}" and with "{{" on begin (start from index = 2)
-                for (i = len - 3; i >= 2; i--) {
-                    ch = text.charAt(i);
-                    pr = text.charAt(i - 1);
-                    prv = text.charAt(i - 2);
-
+                if (typesBySymbol.containsKey(ch)) {
                     if (
-                        (
-                            typesBySymbol.containsKey(ch) && !nonClosesTypes.containsKey(ch)
-                             && (ch != '#' || pr != ch)
-                        ) && pr == prv && pr == openBrace
+                        !nonClosesTypes.containsKey(ch) &&
+                        (ch != '#' || pr != ch) &&
+                        pr == prv &&
+                        pr == openBrace
                     ) {
                         // insert the corresponding close tag
                         editor.getDocument().insertString(offset, "{{" + ch + "}}");
-                        break;
                     }
+
+                    break;
                 }
             }
         }

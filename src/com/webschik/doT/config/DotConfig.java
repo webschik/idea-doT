@@ -30,6 +30,10 @@ public class DotConfig {
         setBooleanPropertyValue(AUTO_COLLAPSE_BLOCKS, enabled);
     }
 
+    public static String getVarName() {
+        return VARNAME.getStringName();
+    }
+
     private static String getStringPropertyValue(Property property) {
         return new PropertyAccessor(PropertiesComponent.getInstance())
                 .getPropertyValue(property);

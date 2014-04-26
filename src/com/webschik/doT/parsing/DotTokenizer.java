@@ -1,6 +1,8 @@
 package com.webschik.doT.parsing;
 
 import com.intellij.psi.tree.IElementType;
+import com.webschik.doT.config.DotConfig;
+
 import java.util.*;
 
 public class DotTokenizer implements Tokenizer {
@@ -30,17 +32,27 @@ public class DotTokenizer implements Tokenizer {
 
     private void tokenize() {
         int i,
+            index,
             len,
             tokenStart,
             tokenEnd,
             openedBracesCount = 0,
+            varnamePatternLength,
+            varnameLength,
+            substringEnd,
             openedDataPrefixesCount = 0;
         char current,
             next,
             prev,
             chr;
 
+        String varname = DotConfig.getVarName(),
+               pattern = varname + ".";
+
         IElementType tokenType;
+
+        varnameLength = varname.length();
+        varnamePatternLength = pattern.length();
 
         if (src != null) {
             len = src.length();
@@ -52,6 +64,11 @@ public class DotTokenizer implements Tokenizer {
                 tokenType = DotTokenTypes.CONTENT;
                 tokenStart = i;
                 tokenEnd = i + 1;
+                substringEnd = i + varnamePatternLength;
+
+                if (substringEnd > len) {
+                    substringEnd = len;
+                }
 
                 if (current == '{' && next == current) {
                     tokenType = DotTokenTypes.OPEN;
@@ -82,8 +99,12 @@ public class DotTokenizer implements Tokenizer {
                             }
                         }
                     }
-                } else if (current == '#' && next == '}' && (i < len - 1) && src.charAt(i + 1) == next) {
-                    continue;
+                } else if (current == '#' && next == '}') {
+                    index = i + 2;
+
+                    if ((index < len) && src.charAt(index) == next) {
+                        continue;
+                    }
                 } else if (current == '}' && next == current) {
                     openedBracesCount--;
 
@@ -101,22 +122,25 @@ public class DotTokenizer implements Tokenizer {
                         tokenType = DotTokenTypes.CLOSE_DEFINE;
                         tokenStart--;
                     }
-                } else if (current == 'i' && next == 't' && i < len - 2 && src.charAt(i + 2) == '.') {
+                } else if (src.substring(i, substringEnd).equals(pattern)) {
                     tokenType = DotTokenTypes.DATA_PREFIX;
                     tokenStart = i;
-                    tokenEnd = i + 3;
 
-                    i += 2;
+                    // varname and '.'
+                    tokenEnd = i + varnamePatternLength;
+
+                    i += varnameLength;
 
                     if (openedDataPrefixesCount > 0) {
                         openedDataPrefixesCount--;
                     }
 
                     openedDataPrefixesCount++;
-                } else {
-                    if (openedBracesCount > 0) {
-                        tokenType = DotTokenTypes.DATA;
-                    }
+                }
+
+                // not found token
+                if (tokenType == DotTokenTypes.CONTENT && openedBracesCount > 0) {
+                    tokenType = DotTokenTypes.DATA;
                 }
 
                 tokens.add(new DotToken(tokenType, tokenStart, tokenEnd));
