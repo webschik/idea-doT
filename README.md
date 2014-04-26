@@ -2,7 +2,7 @@
 
 IDEA-DOT adds support for [doT](http://olado.github.io/doT/index.html) templates to IDEs based on the Intellij IDEA platform (IntelliJ IDEA, IDEA Community Edition, RubyMine, PhpStorm, WebStorm, PyCharm, AppCode, etc).
 
-![doT editing screenshot](https://github.com/webschik/idea-doT/blob/master/sample.png "doT editing")
+![doT editing screenshot](https://raw.githubusercontent.com/webschik/idea-doT/master/sample.png "doT editing")
 
 [Jetbrains plugin repository page](http://plugins.jetbrains.com/plugin/7327)
 
