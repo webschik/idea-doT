@@ -7,15 +7,15 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 class DotElementType extends IElementType {
-    private final String _parseExpectedMessageKey;
+    private final String parseExpectedMessageKey;
 
     /**
-     * @param parseExpectedMessageKey Key to the {@link DotBundle} message to show the user when the parser
+     * @param messageKey Key to the {@link DotBundle} message to show the user when the parser
      *                             expected this token, but found something else.
      */
-    public DotElementType(@NotNull @NonNls String debugName, @NotNull @NonNls String parseExpectedMessageKey) {
+    public DotElementType(@NotNull @NonNls String debugName, @NotNull @NonNls String messageKey) {
         super(debugName, DotLanguage.INSTANCE);
-        _parseExpectedMessageKey = parseExpectedMessageKey;
+        parseExpectedMessageKey = messageKey;
     }
 
     @Override
@@ -24,6 +24,6 @@ class DotElementType extends IElementType {
     }
 
     public String parseExpectedMessage() {
-        return _parseExpectedMessageKey;
+        return parseExpectedMessageKey;
     }
 }

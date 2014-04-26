@@ -11,7 +11,6 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.webschik.doT.psi.DotPsiFile;
-import com.webschik.doT.psi.DotPsiUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -21,16 +20,7 @@ public class DotEnterHandler extends EnterHandlerDelegateAdapter {
 
     public Result preprocessEnter(@NotNull final PsiFile file, @NotNull final Editor editor, @NotNull final Ref<Integer> caretOffset, @NotNull final Ref<Integer> caretAdvance,
                                   @NotNull final DataContext dataContext, final EditorActionHandler originalHandler) {
-        /**
-         * if we are between open and close tags, we ensure the caret ends up in the "logical" place on Enter.
-         * i.e. "{{#foo}}<caret>{{/foo}}" becomes the following on Enter:
-         *
-         * {{#foo}}
-         * <caret>
-         * {{/foo}}
-         *
-         * (Note: <caret> may be indented depending on formatter settings.)
-         */
+
         if (file instanceof DotPsiFile && isBetweenDotTags(editor, file, caretOffset.get())) {
             originalHandler.execute(editor, dataContext);
             return Result.Default;
@@ -50,11 +40,9 @@ public class DotEnterHandler extends EnterHandlerDelegateAdapter {
         EditorHighlighter highlighter = ((EditorEx)editor).getHighlighter();
         HighlighterIterator iterator = highlighter.createIterator(offset - 1);
 
-        final PsiElement openerElement = file.findElementAt(iterator.getStart());
+        PsiElement element = file.findElementAt(iterator.getStart());
 
-        PsiElement openTag = DotPsiUtil.findParentOpenTagElement(openerElement);
-
-        if (openTag == null) {
+        if (element == null) {
             return false;
         }
 
@@ -65,11 +53,9 @@ public class DotEnterHandler extends EnterHandlerDelegateAdapter {
             return false;
         }
 
-        final PsiElement closerElement = file.findElementAt(iterator.getStart());
-
-        PsiElement closeTag = DotPsiUtil.findParentCloseTagElement(closerElement);
+        element = file.findElementAt(iterator.getStart());
 
         // if we got this far, we're between open and close tags iff this is a close tag
-        return closeTag != null;
+        return element != null;
     }
 }

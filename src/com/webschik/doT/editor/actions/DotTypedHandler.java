@@ -9,13 +9,13 @@ import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.tree.IElementType;
 import com.webschik.doT.DotLanguage;
 import com.webschik.doT.config.DotConfig;
-import com.webschik.doT.file.DotFileViewProvider;
-import com.webschik.doT.psi.DotPath;
-import com.webschik.doT.psi.DotPsiElement;
-import com.webschik.doT.psi.DotPsiUtil;
+import com.webschik.doT.parsing.DotTokenTypesBySymbol;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
 
 /**
  * Handler for custom plugin actions on chars typed by the user.  See {@link DotEnterHandler} for custom actions
@@ -23,6 +23,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DotTypedHandler extends TypedHandlerDelegate {
     private int openedBracesCount = 0;
+    private HashMap<Character, IElementType> typesBySymbol = DotTokenTypesBySymbol.types;
+    private HashMap<Character, IElementType> nonClosesTypes = DotTokenTypesBySymbol.nonClosesTypes;
+    private char openBrace = '{';
 
     @Override
     public Result beforeCharTyped(char c, Project project, Editor editor, PsiFile file, FileType fileType) {
@@ -38,7 +41,7 @@ public class DotTypedHandler extends TypedHandlerDelegate {
             PsiDocumentManager.getInstance(project).commitAllDocuments();
 
             // we suppress the built-in "}" auto-complete when we see "{{"
-            if (c == '{' && previousChar.equals("{")) {
+            if (c == openBrace && previousChar.equals("{")) {
                 openedBracesCount++;
 
                 // since the "}" autocomplete is built in to IDEA, we need to hack around it a bit by
@@ -70,7 +73,8 @@ public class DotTypedHandler extends TypedHandlerDelegate {
         if (file.getViewProvider() != null) {
             // if we're looking at a close stache, we may have some business too attend to
             if (c == '}' && previousChar.equals("}")) {
-                //autoInsertCloseTag(project, offset, editor, provider);
+                openedBracesCount--;
+                autoInsertCloseTag(project, offset, editor, provider);
             }
         }
 
@@ -78,27 +82,46 @@ public class DotTypedHandler extends TypedHandlerDelegate {
     }
 
     /**
-     * When appropriate, auto-inserts Handlebars close tags.  i.e.  When "{{#tagId}}" or "{{^tagId}} is typed,
-     *      {{/tagId}} is automatically inserted
+     * When appropriate, auto-inserts doT close tags.  i.e.
+     * When "{{? statements}}", {{?}} is automatically inserted
      */
     private void autoInsertCloseTag(Project project, int offset, Editor editor, FileViewProvider provider) {
+        String text;
+        char ch, pr, prv;
+        int i, len;
+
         if (!DotConfig.isAutoGenerateCloseTagEnabled()) {
             return;
         }
 
         PsiDocumentManager.getInstance(project).commitAllDocuments();
 
-        PsiElement elementAtCaret = provider.findElementAt(offset - 1, DotLanguage.class);
+        PsiElement element = provider.findElementAt(offset - 1, DotLanguage.class);
 
-        PsiElement openTag = DotPsiUtil.findParentOpenTagElement(elementAtCaret);
+        if (element != null && element.getChildren().length > 0) {
+            PsiElement pathElem = element.getChildren()[0];
 
-        if (openTag != null && openTag.getChildren().length > 1) {
-            // we've got an open block type stache... find its "name" (its first path element)
-            DotPsiElement pathElem = (DotPsiElement) openTag.getChildren()[1];
+            if (pathElem != null) {
+                text = pathElem.getText();
+                len = text.length();
 
-            if (pathElem != null && pathElem instanceof DotPath) {
-                // insert the corresponding close tag
-                editor.getDocument().insertString(offset, "{{/" + pathElem.getText() + "}}");
+                // without last "}}" and with "{{" on begin (start from index = 2)
+                for (i = len - 3; i >= 2; i--) {
+                    ch = text.charAt(i);
+                    pr = text.charAt(i - 1);
+                    prv = text.charAt(i - 2);
+
+                    if (
+                        (
+                            typesBySymbol.containsKey(ch) && !nonClosesTypes.containsKey(ch)
+                             && (ch != '#' || pr != ch)
+                        ) && pr == prv && pr == openBrace
+                    ) {
+                        // insert the corresponding close tag
+                        editor.getDocument().insertString(offset, "{{" + ch + "}}");
+                        break;
+                    }
+                }
             }
         }
     }

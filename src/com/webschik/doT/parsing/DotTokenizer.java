@@ -2,14 +2,12 @@ package com.webschik.doT.parsing;
 
 import com.intellij.psi.tree.IElementType;
 import java.util.*;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 public class DotTokenizer implements Tokenizer {
 
     private String src;
     private List<DotToken> tokens;
-    private HashMap<Character, IElementType> typesBySymbol = new HashMap<Character, IElementType>();
+    private HashMap<Character, IElementType> typesBySymbol = DotTokenTypesBySymbol.types;
 
     public DotTokenizer() {
         this(null);
@@ -23,11 +21,6 @@ public class DotTokenizer implements Tokenizer {
     private void init(String buffer) {
         src = buffer;
         tokens = new ArrayList<DotToken>();
-        typesBySymbol.put('!', DotTokenTypes.OPEN_ESCAPED);
-        typesBySymbol.put('=', DotTokenTypes.OPEN_UNESCAPED);
-        typesBySymbol.put('?', DotTokenTypes.CONDITIONAL);
-        typesBySymbol.put('~', DotTokenTypes.ITERATION);
-        typesBySymbol.put('#', DotTokenTypes.OPEN_PARTIAL);
     }
 
     private void parse() {
@@ -40,6 +33,7 @@ public class DotTokenizer implements Tokenizer {
             len,
             tokenStart,
             tokenEnd,
+            openedBracesCount = 0,
             openedDataPrefixesCount = 0;
         char current,
             next,
@@ -65,6 +59,8 @@ public class DotTokenizer implements Tokenizer {
                     tokenEnd = i + 2;
                     i++;
 
+                    openedBracesCount++;
+
                     if (openedDataPrefixesCount > 0) {
                         openedDataPrefixesCount--;
                     }
@@ -89,6 +85,8 @@ public class DotTokenizer implements Tokenizer {
                 } else if (current == '#' && next == '}' && (i < len - 1) && src.charAt(i + 1) == next) {
                     continue;
                 } else if (current == '}' && next == current) {
+                    openedBracesCount--;
+
                     if (openedDataPrefixesCount > 0) {
                         openedDataPrefixesCount--;
                     }
@@ -116,7 +114,7 @@ public class DotTokenizer implements Tokenizer {
 
                     openedDataPrefixesCount++;
                 } else {
-                    if (openedDataPrefixesCount > 0) {
+                    if (openedBracesCount > 0) {
                         tokenType = DotTokenTypes.DATA;
                     }
                 }

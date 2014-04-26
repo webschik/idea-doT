@@ -1,7 +1,6 @@
 package com.webschik.doT.config;
 
 import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.lang.Language;
 
 import static com.webschik.doT.config.Property.*;
 
@@ -29,18 +28,6 @@ public class DotConfig {
 
     public static void setAutoCollapseBlocks(boolean enabled) {
         setBooleanPropertyValue(AUTO_COLLAPSE_BLOCKS, enabled);
-    }
-
-    public static Language getCommenterLanguage() {
-        return Language.findLanguageByID(getStringPropertyValue(COMMENTER_LANGUAGE_ID));
-    }
-
-    public static void setCommenterLanguage(Language language) {
-        if (language == null) {
-            setStringPropertyValue(COMMENTER_LANGUAGE_ID, null);
-        } else {
-            setStringPropertyValue(COMMENTER_LANGUAGE_ID, language.getID());
-        }
     }
 
     private static String getStringPropertyValue(Property property) {

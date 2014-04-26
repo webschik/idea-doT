@@ -31,11 +31,6 @@ public class DotHighlighter extends SyntaxHighlighterBase {
         return new DotLexer(new DotTokenizer());
     }
 
-    private static final TextAttributesKey IDENTIFIERS = TextAttributesKey.createTextAttributesKey(
-            "DOT.IDENTIFIERS",
-            SyntaxHighlighterColors.KEYWORD.getDefaultAttributes()
-    );
-
     private static final TextAttributesKey COMMENTS = TextAttributesKey.createTextAttributesKey(
             "DOT.COMMENTS",
             SyntaxHighlighterColors.DOC_COMMENT.getDefaultAttributes()
