@@ -1,9 +1,14 @@
-idea-doT
-===
+# [doT](http://olado.github.io/doT/index.html) template plugin for Jetbrains IDEs
 
-> Jetbrains IDE's plugin for doT.js template
--
-> [View on JetBrains plugins store](http://plugins.jetbrains.com/plugin/7327?pr=webStorm)  
+IDEA-DOT adds support for [doT](http://olado.github.io/doT/index.html) templates to IDEs based on the Intellij IDEA platform (IntelliJ IDEA, IDEA Community Edition, RubyMine, PhpStorm, WebStorm, PyCharm, AppCode, etc).
+
+[Jetbrains plugin repository page](http://plugins.jetbrains.com/plugin/7327)
+
+## Installing
+To install the latest release (and get automatic updates), install this plugin using your IDE's plugin manager:
+* In _Settings->Plugins_, choose "Browse repositories".  Find "doT" on the list, right-click, then select "Download and Install"
+
+By default, the plugin handles `*.dot` files.
 
 ## Release History
 
