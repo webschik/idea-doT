@@ -1,14 +1,9 @@
 <idea-plugin version="2" url="https://github.com/webschik/idea-doT">
     <id>com.webschik.doT</id>
     <name>doT</name>
-    <version>1.5.2</version>
+    <version>1.5.3</version>
     <description><![CDATA[
         Plugin for <a href="http://olado.github.io/doT/index.html" taget="_blank">doT.js</a> templates support.
-        <br/>
-        <br/>
-        <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZKN7GECMPTS8N">
-        Small donations are welcomed
-        </a>
     ]]></description>
     <category>Custom Languages</category>
     <change-notes><![CDATA[
