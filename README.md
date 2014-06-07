@@ -12,6 +12,9 @@ To install the latest release (and get automatic updates), install this plugin u
 
 By default, the plugin handles `*.dot` files.
 
+## Help
+* [Donate with LiqPay](https://www.liqpay.com/?do=clickNbuy&button=i67533662223)
+
 ## Release History
 
  * 2013-09-20   v1.0   Work in progress, not yet officially released.

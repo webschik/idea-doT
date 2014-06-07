@@ -1,9 +1,11 @@
 <idea-plugin version="2" url="https://github.com/webschik/idea-doT">
     <id>com.webschik.doT</id>
     <name>doT</name>
-    <version>1.5.3</version>
+    <version>1.5.4</version>
     <description><![CDATA[
         Plugin for <a href="http://olado.github.io/doT/index.html" taget="_blank">doT.js</a> templates support.
+        <br/>
+        <a href="https://www.liqpay.com/?do=clickNbuy&button=i67533662223" taget="_blank">Donate with LiqPay</a>
     ]]></description>
     <category>Custom Languages</category>
     <change-notes><![CDATA[
