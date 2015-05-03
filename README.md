@@ -23,4 +23,4 @@ By default, the plugin handles `*.dot` files.
 
 ---
 
-Library submitted by ["webschik" Knyazevich Denis](https://github.com/webschik)
+Library submitted by ["webschik" Knyazevich Denis](https://www.liqpay.com/api/checkout?data=eyJ2ZXJzaW9uIjozLCJwdWJsaWNfa2V5IjoiaTY3NTMzNjYyMjIzIiwiYW1vdW50IjoiMSIsImN1cnJlbmN5IjoiVVNEIiwiZGVzY3JpcHRpb24iOiLQnNC%2B0Lkg0YLQvtCy0LDRgCIsInR5cGUiOiJkb25hdGUiLCJsYW5ndWFnZSI6ImVuIiwicGF5X3dheSI6ImNhcmQsbGlxcGF5LHByaXZhdDI0In0%3D&signature=hbopmxoSLT553Vm0HqQ1EpKPW9c%3D)
