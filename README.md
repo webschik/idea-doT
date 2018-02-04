@@ -20,8 +20,4 @@ By default, the plugin handles `*.dot` files.
 
 ## Donate
 
-[You may buy me a cup of coffee](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HKGZXNBEWKJMN)
-
----
-
-Library submitted by ["webschik"]
+[You may buy me a cup of coffee ☕](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HKGZXNBEWKJMN)
