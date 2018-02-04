@@ -1,0 +1,37 @@
+<idea-plugin>
+  <id>com.webschik.doT</id>
+  <name>Plugin display name here</name>
+  <version>2.0</version>
+  <vendor url="https://github.com/webschik">webschik</vendor>
+
+  <description><![CDATA[
+      Plugin for <a href="http://olado.github.io/doT/index.html" target="_blank">doT.js</a> templates support.
+      <br/>
+      <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HKGZXNBEWKJMN"
+      target="_blank">Donate with PayPal</a>
+    ]]></description>
+
+  <change-notes><![CDATA[
+      <ul>
+        <li>Bug fixes</li>
+        <li>Refactoring</li>
+      </ul>
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="173.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <depends>com.intellij.modules.lang</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <fileTypeFactory implementation="com.webschik.doT.DotFileTypeFactory"/>
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+</idea-plugin>
