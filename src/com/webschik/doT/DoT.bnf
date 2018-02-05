@@ -1,0 +1,20 @@
+{
+  parserClass="com.webschik.doT.parser.DoTParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="DoT"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.webschik.doT.psi"
+  psiImplPackage="com.webschik.doT.psi.impl"
+
+  elementTypeHolderClass="com.webschik.doT.psi.DoTTypes"
+  elementTypeClass="com.webschik.doT.psi.DoTElementType"
+  tokenTypeClass="com.webschik.doT.psi.DoTTokenType"
+}
+
+doTFile ::= item_*
+
+private item_ ::= (property|COMMENT|CRLF)
+
+property ::= (KEY? SEPARATOR VALUE?) | KEY

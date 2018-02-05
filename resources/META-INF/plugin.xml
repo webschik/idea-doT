@@ -5,17 +5,15 @@
   <vendor url="https://github.com/webschik">webschik</vendor>
 
   <description><![CDATA[
-      Plugin for <a href="http://olado.github.io/doT/index.html" target="_blank">doT.js</a> templates support.
+      Plugin for <a href="https://github.com/olado/doT" target="_blank">doT.js</a> templates support.
       <br/>
       <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HKGZXNBEWKJMN"
-      target="_blank">Donate with PayPal</a>
+         target="_blank">Donate with PayPal</a>
     ]]></description>
 
   <change-notes><![CDATA[
-      <ul>
-        <li>Bug fixes</li>
-        <li>Refactoring</li>
-      </ul>
+      <a href="https://github.com/webschik/idea-doT/blob/master/CHANGELOG.md"
+         target="_blank">Check the changelog on GitHub</a>
     ]]>
   </change-notes>
 
@@ -27,7 +25,8 @@
   <depends>com.intellij.modules.lang</depends>
 
   <extensions defaultExtensionNs="com.intellij">
-    <fileTypeFactory implementation="com.webschik.doT.DotFileTypeFactory"/>
+    <fileTypeFactory implementation="com.webschik.doT.DoTFileTypeFactory"/>
+    <lang.parserDefinition language="DoT" implementationClass="com.webschik.doT.DoTParserDefinition"/>
   </extensions>
 
   <actions>

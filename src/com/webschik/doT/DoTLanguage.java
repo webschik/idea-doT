@@ -5,8 +5,8 @@ import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.psi.templateLanguages.TemplateLanguage;
 
-public class DotLanguage extends Language implements TemplateLanguage {
-    public static final DotLanguage INSTANCE = new DotLanguage();
+public class DoTLanguage extends Language implements TemplateLanguage {
+    public static final DoTLanguage INSTANCE = new DoTLanguage();
 
     // ideally this would be public static, but the static inits in the tests get cranky when we do that
     @SuppressWarnings ("SameReturnValue")
@@ -14,7 +14,7 @@ public class DotLanguage extends Language implements TemplateLanguage {
         return StdFileTypes.HTML;
     }
 
-    private DotLanguage() {
-        super("Dot", "text/x-dot-template");
+    private DoTLanguage() {
+        super("DoT", "text/x-dot-template");
     }
 }

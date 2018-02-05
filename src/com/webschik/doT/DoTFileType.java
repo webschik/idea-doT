@@ -5,23 +5,23 @@ import org.jetbrains.annotations.*;
 
 import javax.swing.*;
 
-public class DotFileType extends LanguageFileType {
-    public static final DotFileType INSTANCE = new DotFileType();
+public class DoTFileType extends LanguageFileType {
+    public static final DoTFileType INSTANCE = new DoTFileType();
 
-    private DotFileType() {
-        super(DotLanguage.INSTANCE);
+    private DoTFileType() {
+        super(DoTLanguage.INSTANCE);
     }
 
     @NotNull
     @Override
     public String getName() {
-        return "Dot file";
+        return "doT.js";
     }
 
     @NotNull
     @Override
     public String getDescription() {
-        return "Dot template file";
+        return "doT.js template file";
     }
 
     @NotNull
@@ -33,6 +33,6 @@ public class DotFileType extends LanguageFileType {
     @Nullable
     @Override
     public Icon getIcon() {
-        return DotIcons.FILE;
+        return DoTIcons.FILE;
     }
 }
